@@ -27,6 +27,12 @@
 		"requires": {"proton": 1, "neutron": 1, "electron": 1},
 		"produces": {"quark": 4, "electron": 4}
 	},
+	"carbon": {
+		"name": "Carbon",
+		"group": "Atomic",
+		"require": {"proton": 6, "neutron": 6, "electron": 6},
+		"produces": {"quark": 10, "electron": 10}
+	},
 	"oxygen": {
 		"name": "Oxygen",
 		"group": "Atomic",
