@@ -1,34 +1,47 @@
 {
 	"quark": {
 		"name": "Quark",
+		"group": "Quantum",
 		"produces": {"quark": 1, "electron": 1}
 	},
 	"electron": {
 		"name": "Electron",
+		"group": "Quantum",
 		"produces": {"quark": 1, "electron": 1}
 	},
 	"proton": {
 		"name": "Proton",
+		"group": "Quantum",
 		"requires": {"quarks": 3},
 		"produces": {"quark": 2, "electron": 2}
 	},
 	"neutron": {
 		"name": "Neutron",
+		"group": "Quantum",
 		"requires": {"quarks": 3},
 		"produces": {"quark": 2, "electron": 2}
 	},
 	"hydrogen": {
 		"name": "Hydrogen",
+		"group": "Atomic",
 		"requires": {"proton": 1, "neutron": 1, "electron": 1},
 		"produces": {"quark": 4, "electron": 4}
 	},
+	"carbon": {
+		"name": "Carbon",
+		"group": "Atomic",
+		"require": {"proton": 6, "neutron": 6, "electron": 6},
+		"produces": {"quark": 10, "electron": 10}
+	},
 	"oxygen": {
 		"name": "Oxygen",
+		"group": "Atomic",
 		"require": {"proton": 8, "neutron": 8, "electron": 8},
 		"produces": {"quark": 10, "electron": 10}
 	},
 	"water": {
 		"name": "Water",
+		"group": "Macro",
 		"require": {"hydrogen": 2, "oxygen": 1},
 		"produces": {"quark": 15, "electron": 15}
 	}
