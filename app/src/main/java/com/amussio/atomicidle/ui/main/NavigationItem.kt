@@ -1,4 +1,4 @@
-package com.amussio.atomicidle.ui
+package com.amussio.atomicidle.ui.main
 
 import com.amussio.atomicidle.R
 

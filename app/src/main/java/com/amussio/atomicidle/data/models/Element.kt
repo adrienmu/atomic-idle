@@ -1,7 +1,7 @@
 package com.amussio.atomicidle.data.models
 
 data class Element(
-    
+
     override val name: String,
     override val group:String,
     override val requires: List<Pair<String, Int>>,
