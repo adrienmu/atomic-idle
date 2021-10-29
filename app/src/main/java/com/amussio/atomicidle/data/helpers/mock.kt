@@ -44,7 +44,7 @@ fun getMockStock(): Stock {
         produces = mutableMapOf("quark" to 4, "electron" to 4),
         quantity = 1
     )
-    
+
     return Stock(
         elements = listOf(quark, electron, proton, neutron, hydrogen),
         timestamp = 0
