@@ -18,31 +18,6 @@ import androidx.navigation.NavHostController
 import com.amussio.atomicidle.R
 
 @Composable
-fun HomeScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Blue)
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Home View",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 25.sp
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen()
-}
-
-@Composable
 fun MusicScreen() {
     Column(
         modifier = Modifier

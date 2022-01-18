@@ -3,6 +3,7 @@ package com.amussio.atomicidle.ui.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -22,8 +23,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.amussio.atomicidle.ui.*
+import com.amussio.atomicidle.ui.homescreen.HomeScreen
 import com.amussio.atomicidle.ui.theme.AtomicIdleTheme
 
+@ExperimentalFoundationApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun Home() {
     val navController = rememberNavController()
@@ -107,6 +111,7 @@ fun BottomNavigationBar(navController: NavController) {
         }
     }
 }
+@ExperimentalFoundationApi
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = NavigationItem.MyWorld.route) {
@@ -144,6 +149,7 @@ fun TotalRessource(name: String, value: Int) {
     }
 }
 
+@ExperimentalFoundationApi
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {

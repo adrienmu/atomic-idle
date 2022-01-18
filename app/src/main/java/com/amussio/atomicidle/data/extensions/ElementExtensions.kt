@@ -9,3 +9,8 @@ fun Element.add() = {
     var provides = 1
     quantity = quantity + (provides*7f.pow(ln(quantity.toFloat())/ln(10f))).toInt()
 }
+
+fun Element.printProduction() : String {
+    var provides = 1
+    return (quantity + (provides*7f.pow(ln(quantity.toFloat())/ln(10f))).toInt()).toString()
+}
