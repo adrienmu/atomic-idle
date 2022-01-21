@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface StockDao {
     @Query("SELECT * FROM stock LIMIT 1")
-    fun getStock(): Flow<Stock>
+    fun getStock(): Stock
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(stock: Stock)

@@ -8,8 +8,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,22 +22,38 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.amussio.atomicidle.data.extensions.printProduction
 import com.amussio.atomicidle.data.helpers.getMockStock
 import com.amussio.atomicidle.data.models.Element
+import com.amussio.atomicidle.data.models.Stock
+import com.amussio.atomicidle.data.repository.StockRepository
 import com.amussio.atomicidle.ui.theme.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 
 @ExperimentalFoundationApi
 @Composable
-fun HomeScreen() {
-    val stock = getMockStock()
+fun HomeScreen(viewModel: HomeScreenViewModel) {
+    val stock by viewModel.stock.collectAsState(initial = null)
+    if (stock == null || stock?.elements == null || stock?.elements?.count() == 0) {
+        Button(onClick = {
+            viewModel.addItem(getMockStock())
+        }) {
+            Text("Add")
+        }
+    }
     LazyVerticalGrid(
         cells = GridCells.Adaptive(Item1),
         contentPadding = PaddingValues(vertical = VerticalPadding, horizontal = HorizontalPadding
         )) {
-        items(stock.elements.count()) {
-            ItemElement(stock.elements.get(it))
+        items(stock?.elements?.count()?:0) {
+            ItemElement(stock?.elements!!.get(it))
         }
     }
 }
@@ -88,5 +106,16 @@ fun ItemElement(element: Element) {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(hiltViewModel())
+}
+
+@HiltViewModel
+class HomeScreenViewModel @Inject constructor(var stockRepository: StockRepository): ViewModel() {
+    fun addItem(stock: Stock) {
+        viewModelScope.launch(Dispatchers.IO) {
+            stockRepository.insert(stock)
+        }
+    }
+    val stock = stockRepository.getInfiniteStockFlow()
+
 }

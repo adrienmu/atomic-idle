@@ -3,6 +3,7 @@ package com.amussio.atomicidle.ui.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,27 +15,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key.Companion.Home
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.amussio.atomicidle.data.dao.StockDao
+import com.amussio.atomicidle.data.database.StockRoomDatabase
+import com.amussio.atomicidle.data.repository.StockRepository
 import com.amussio.atomicidle.ui.*
 import com.amussio.atomicidle.ui.homescreen.HomeScreen
+import com.amussio.atomicidle.ui.homescreen.HomeScreenViewModel
 import com.amussio.atomicidle.ui.theme.AtomicIdleTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalFoundationApi
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val viewModel: HomeScreenViewModel by viewModels()
         setContent {
             AtomicIdleTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Home()
+                    AppContainer()
                 }
             }
         }
@@ -43,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
 @ExperimentalFoundationApi
 @Composable
-fun Home() {
+fun AppContainer() {
     val navController = rememberNavController()
     Scaffold(modifier = Modifier.background(Color.Black),
         topBar = {TopBar()},
@@ -116,7 +126,7 @@ fun BottomNavigationBar(navController: NavController) {
 fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = NavigationItem.MyWorld.route) {
         composable(NavigationItem.MyWorld.route) {
-            HomeScreen()
+            HomeScreen(hiltViewModel())
         }
         composable(NavigationItem.Build.route) {
             MusicScreen()
@@ -155,7 +165,7 @@ fun TotalRessource(name: String, value: Int) {
 fun DefaultPreview() {
     AtomicIdleTheme {
         Surface(color = Color.Black) {
-            Home()
+            AppContainer()
         }
     }
 }
