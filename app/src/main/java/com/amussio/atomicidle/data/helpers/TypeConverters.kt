@@ -8,24 +8,25 @@ import com.google.gson.reflect.TypeToken
 import java.io.Serializable
 import java.lang.reflect.Type
 
-object TypeConverters {
-
+object MapConverter {
     @TypeConverter
     @JvmStatic
-    fun stringToMap(value: JsonElement): Map<String, Int> {
-        return Gson().fromJson(value,  object : TypeToken<Map<String, String>>() {}.type)
+    fun stringToMap(value: String): Map<String, Int>? {
+        return Gson().fromJson(value,  object : TypeToken<Map<String, Int>>() {}.type)
     }
 
     @TypeConverter
     @JvmStatic
-    fun mapToString(value: Map<String, String>?): String {
-        return if(value == null) "" else Gson().toJson(value)
+    fun mapToString(value: Map<String, Int>?): String {
+        return Gson().toJson(value, object : TypeToken<Map<String, Int>>() {}.type)
     }
+}
 
+object ElementConverter {
     @TypeConverter
     @JvmStatic
-    fun stringToElement(value: JsonElement): Element {
-        return Gson().fromJson(value,  object : TypeToken<Map<String, String>>() {}.type)
+    fun stringToElement(value: String): Element {
+        return Gson().fromJson(value,  object : TypeToken<Element>() {}.type)
     }
 
     @TypeConverter
@@ -33,26 +34,22 @@ object TypeConverters {
     fun elementToString(value: Element?): String {
         return if(value == null) "" else Gson().toJson(value)
     }
+}
 
+object ElementsConverter {
     @TypeConverter
     @JvmStatic
-    fun fromElementList(elements: List<Element>?): String? {
-        if (elements == null) {
-            return null
-        }
+    fun fromElementList(elements: List<Element>): String {
         val gson = Gson()
-        val type: Type = object : TypeToken<List<Element>?>() {}.type
+        val type: Type = object : TypeToken<List<Element>>() {}.type
         return gson.toJson(elements, type)
     }
 
     @TypeConverter
     @JvmStatic
-    fun toElementList(elementsString: String?): List<Element>? {
-        if (elementsString == null) {
-            return null
-        }
+    fun toElementList(elementsString: String): List<Element> {
         val gson = Gson()
         val type: Type = object : TypeToken<List<Element>?>() {}.type
-        return gson.fromJson<List<Element>>(elementsString, type)
+        return gson.fromJson(elementsString, type)
     }
 }
