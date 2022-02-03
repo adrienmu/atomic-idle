@@ -15,4 +15,7 @@ interface StockDao {
 
     @Update
     suspend fun update(stock: Stock)
+
+    /*@Query("UPDATE element SET quantity = :value WHERE name =:elementName")
+    suspend fun update(elementName: String, value: Int)*/
 }

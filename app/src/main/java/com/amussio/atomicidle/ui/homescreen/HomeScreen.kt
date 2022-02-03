@@ -1,6 +1,5 @@
 package com.amussio.atomicidle.ui.homescreen
 
-import android.widget.Space
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -11,17 +10,14 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,15 +28,17 @@ import com.amussio.atomicidle.data.models.Stock
 import com.amussio.atomicidle.data.repository.StockRepository
 import com.amussio.atomicidle.ui.theme.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ExperimentalFoundationApi
 @Composable
 fun HomeScreen(viewModel: HomeScreenViewModel) {
     val stock by viewModel.stock.collectAsState(initial = null)
+    val scope = rememberCoroutineScope()
     if (stock == null || stock?.elements == null || stock?.elements?.count() == 0) {
         Button(onClick = {
             viewModel.addItem(getMockStock())
@@ -53,7 +51,9 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
         contentPadding = PaddingValues(vertical = VerticalPadding, horizontal = HorizontalPadding
         )) {
         items(stock?.elements?.count()?:0) {
-            ItemElement(stock?.elements!!.get(it))
+            ItemElement(stock?.elements!![it]) {
+                scope.launch(Dispatchers.Default) { viewModel.stockRepository.increase(it, 1) }
+            }
         }
     }
 }
@@ -64,7 +64,7 @@ fun ItemGroup(name: String) {
 }
 
 @Composable
-fun ItemElement(element: Element) {
+fun ItemElement(element: Element, onItemClick: (String) -> Unit) {
     val context = LocalContext.current
     var enable by remember { mutableStateOf(true) }
     val scope by remember { mutableStateOf(CoroutineScope(Dispatchers.Default)) }
@@ -76,7 +76,8 @@ fun ItemElement(element: Element) {
             .clickable {
                 if (enable == true) {
                     enable = false
-                    element.quantity += 1 //faire un repository
+                    element.quantity += 1
+                    onItemClick(element.name)
                     scope.launch {
                         delay(1000L)
                         enable = true

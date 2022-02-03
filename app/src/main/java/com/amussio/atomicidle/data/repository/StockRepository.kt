@@ -32,4 +32,16 @@ class StockRepository @Inject constructor(private val stockDao: StockDao) {
     suspend fun insert(stock: Stock) {
         stockDao.insert(stock)
     }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun increase(elementName: String, value: Int) {
+        val stock = stockDao.getStock()
+        stock.elements.forEach {
+            if (it.name == elementName) {
+                it.quantity += value
+            }
+        }
+        stockDao.update(stock)
+    }
 }
