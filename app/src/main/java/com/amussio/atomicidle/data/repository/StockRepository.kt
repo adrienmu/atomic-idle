@@ -1,7 +1,9 @@
 package com.amussio.atomicidle.data.repository
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import com.amussio.atomicidle.data.dao.StockDao
+import com.amussio.atomicidle.data.helpers.getStockIncreasedPerSec
 import com.amussio.atomicidle.data.models.Element
 import com.amussio.atomicidle.data.models.Stock
 import kotlinx.coroutines.Dispatchers
@@ -16,9 +18,26 @@ import javax.inject.Singleton
 @Singleton
 class StockRepository @Inject constructor(private val stockDao: StockDao) {
 
-    fun getInfiniteStockFlow(): Flow<Stock> = flow {
+    fun getInfiniteStockFlow(): Flow<Stock?> = flow {
         while (true) {
             delay(1_000)
+            val stock = stockDao.getStock()
+            val increasedStock = getStockIncreasedPerSec(stock)
+            increasedStock.forEach {
+                increasedElement ->
+                stock?.elements?.find { it.name.lowercase() == increasedElement.key.lowercase() }!!.quantity +=
+                    increasedElement.value*((System.currentTimeMillis() - stock!!.timestamp)/1000)
+            }
+            stock?.let {
+                Log.d("Adrien", "current=${System.currentTimeMillis()}")
+                Log.d("Adrien", "stocked=${it.timestamp}")
+                Log.d("Adrien", "update=${((System.currentTimeMillis() - it.timestamp)/1000)}")
+            }
+
+            stock?.timestamp = System.currentTimeMillis()
+            if (stock != null) {
+                stockDao.insert(stock)
+            }
             emit(stockDao.getStock())
         }
     }.flowOn(Dispatchers.IO)
@@ -37,7 +56,7 @@ class StockRepository @Inject constructor(private val stockDao: StockDao) {
     @WorkerThread
     suspend fun increase(elementName: String, value: Int) {
         val stock = stockDao.getStock()
-        stock.elements.forEach {
+        stock?.elements?.forEach {
             if (it.name == elementName) {
                 it.quantity += value
             }

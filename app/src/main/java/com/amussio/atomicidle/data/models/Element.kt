@@ -15,14 +15,14 @@ data class Element(
 
     @ColumnInfo(name = "requires")
     @TypeConverters(MapConverter::class)
-    val requires: Map<String, Int>?,
+    val requires: Map<String, Double>?,
 
     @ColumnInfo(name = "produces")
     @TypeConverters(MapConverter::class)
-    val produces: Map<String, Int>?,
+    val produces: Map<String, Double>?,
 
     @ColumnInfo(name = "quantity")
-    var quantity: Int
+    var quantity: Double
 
     )
 

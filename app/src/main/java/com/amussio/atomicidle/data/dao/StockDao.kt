@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface StockDao {
     @Query("SELECT * FROM stock LIMIT 1")
-    fun getStock(): Stock
+    fun getStock(): Stock?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(stock: Stock)
 
     @Update
-    suspend fun update(stock: Stock)
+    suspend fun update(stock: Stock?)
 
     /*@Query("UPDATE element SET quantity = :value WHERE name =:elementName")
     suspend fun update(elementName: String, value: Int)*/

@@ -18,4 +18,4 @@ data class Stock(
     var elements: List<Element>,
 
     @ColumnInfo(name = "timestamp")
-    var timestamp: Int)
+    var timestamp: Long = System.currentTimeMillis())

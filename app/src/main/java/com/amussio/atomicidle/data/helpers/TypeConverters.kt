@@ -11,14 +11,14 @@ import java.lang.reflect.Type
 object MapConverter {
     @TypeConverter
     @JvmStatic
-    fun stringToMap(value: String): Map<String, Int>? {
-        return Gson().fromJson(value,  object : TypeToken<Map<String, Int>>() {}.type)
+    fun stringToMap(value: String): Map<String, Double>? {
+        return Gson().fromJson(value,  object : TypeToken<Map<String, Double>>() {}.type)
     }
 
     @TypeConverter
     @JvmStatic
-    fun mapToString(value: Map<String, Int>?): String {
-        return Gson().toJson(value, object : TypeToken<Map<String, Int>>() {}.type)
+    fun mapToString(value: Map<String, Double>?): String {
+        return Gson().toJson(value, object : TypeToken<Map<String, Double>>() {}.type)
     }
 }
 
