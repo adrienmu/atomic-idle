@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amussio.atomicidle.data.extensions.printProduction
+import com.amussio.atomicidle.data.extensions.printQuantity
 import com.amussio.atomicidle.data.helpers.getMockStock
 import com.amussio.atomicidle.data.models.Element
 import com.amussio.atomicidle.data.models.Stock
@@ -91,7 +92,7 @@ fun ItemElement(element: Element, onItemClick: (String) -> Unit) {
                 .padding(Layout2)
                 .align(alignment = Alignment.TopCenter)) {
                 Text(modifier = Modifier.fillMaxSize(), textAlign = TextAlign.Center, text = element.name)
-                Text(modifier = Modifier.fillMaxSize(), textAlign = TextAlign.Center, text = "x ${element.quantity /*TODO faire un repository qui recupere la valeur*/}")
+                Text(modifier = Modifier.fillMaxSize(), textAlign = TextAlign.Center, text = "x ${element.printQuantity()}")
             }
             Text(modifier = Modifier
                 .padding(Layout2)

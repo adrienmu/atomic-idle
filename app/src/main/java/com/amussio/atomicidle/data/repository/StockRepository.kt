@@ -26,14 +26,8 @@ class StockRepository @Inject constructor(private val stockDao: StockDao) {
             increasedStock.forEach {
                 increasedElement ->
                 stock?.elements?.find { it.name.lowercase() == increasedElement.key.lowercase() }!!.quantity +=
-                    increasedElement.value*((System.currentTimeMillis() - stock!!.timestamp)/1000)
+                    increasedElement.value*(((System.currentTimeMillis() - stock!!.timestamp)/1000).toInt())
             }
-            stock?.let {
-                Log.d("Adrien", "current=${System.currentTimeMillis()}")
-                Log.d("Adrien", "stocked=${it.timestamp}")
-                Log.d("Adrien", "update=${((System.currentTimeMillis() - it.timestamp)/1000)}")
-            }
-
             stock?.timestamp = System.currentTimeMillis()
             if (stock != null) {
                 stockDao.insert(stock)

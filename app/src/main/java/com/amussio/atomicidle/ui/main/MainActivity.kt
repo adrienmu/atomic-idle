@@ -70,8 +70,7 @@ fun TopBar() {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column() {
-            TotalRessource(name = "Energie", value = 5548)
-            TotalRessource(name = "CO2", value = 71)
+            Text(text = "Version de dev")
         }
     }
 
